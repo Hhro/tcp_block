@@ -12,6 +12,7 @@
 #include "xpkt.h"
 
 #define IP(pkt)    (reinterpret_cast<struct iphdr *>(pkt + ETH_HLEN))
+#define IP_HLEN    20
 
 class Ip : public Xpkt{
     private:
@@ -41,6 +42,8 @@ class Ip : public Xpkt{
         pktbyte_n* get_daddr() { return ip_daddr; }
         std::string get_saddr_str() { return ip_saddr_str; }
         std::string get_daddr_str() { return ip_daddr_str; }
+        void set_checksum();
+        void set_tot_len(int tot_len);
         void assemble();
         void dissect();
 };

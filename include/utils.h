@@ -20,3 +20,4 @@ void print_mac(pktbyte_n *mac, std::string prefix);
 void parse_mac(pktbyte_n *mac, std::string *mac_str);
 void print_ip(pktbyte_n *ip, std::string prefix);
 void parse_ip(pktbyte_n *ip, std::string *ip_str);
+uint16_t calc_checksum(void* vdata,size_t length);

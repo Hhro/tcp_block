@@ -1,4 +1,4 @@
-EXEC = arp_spoof
+EXEC = tcp_block
 CPP = g++
 
 $(EXEC): main.o
@@ -8,4 +8,4 @@ $(EXEC): main.o
 	$(CPP) -c $< -o $@ -I../include
 
 clean:
-	rm main.o arp_spoof
+	rm main.o tcp_block

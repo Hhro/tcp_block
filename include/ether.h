@@ -27,6 +27,10 @@ class Ether : public Xpkt{
         pktword_n h_proto;
 
     public:
+        Ether(Xpkt xpkt);
         Ether(pktbyte_n *dst, pktbyte_n *src, pktword_h proto);
+        pktbyte_n* get_dst(){ return h_dest; }
+        pktbyte_n* get_src(){ return h_source; }
         pktword_n get_proto();
+        void dissect();
 };

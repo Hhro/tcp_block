@@ -89,7 +89,7 @@ int Agent::send(Xpkt *pkt){
         return -1;
     }
 
-    if(!pcap_inject(handle, pkt->get_pktbuf(), pkt->get_len())){
+    if(pcap_inject(handle, pkt->get_pktbuf(), pkt->get_len()) <= 0){
         pcap_perror(handle, "send: ");
         return -1;
     }

@@ -4,23 +4,39 @@ Ip::Ip(Xpkt xpkt) : Xpkt(xpkt){
     Ip::dissect();
 }
 
-Ip::Ip(pktbyte_n protocol, pktbyte_n *saddr, pktbyte_n *daddr){
-    std::srand(0xcfcfcfcf);
+Ip::Ip(pktbyte_n protocol, pktbyte_n *saddr, pktbyte_n *daddr) : Xpkt(){
+    std::srand(0x12345678);
 
     ip_hlv = 0x45;  //Only IPv4 now
     ip_tos = 0x0;
     ip_tot_len = htons(0x14);
-    ip_id = htons(std::rand()&&0xffff);
-    ip_frag_off = 0x0;
+    ip_id = htons(std::rand()&0xffff);
+    ip_frag_off = htons(0x4000);
     ip_ttl = 128;
     ip_protocol = protocol;
     ip_check = 0;
+    ip_payload = nullptr;
     
     memcpy(ip_saddr, saddr, 4);
     memcpy(ip_daddr, daddr, 4);
 
     parse_ip(ip_saddr, &ip_saddr_str);
     parse_ip(ip_daddr, &ip_daddr_str);
+
+    assemble();
+}
+
+void Ip::set_checksum(){
+    struct iphdr* ip = reinterpret_cast<struct iphdr*>(get_pktbuf());
+    ip->check = 0;
+    ip_check = calc_checksum(get_pktbuf(), IP_HLEN);
+    ip->check = ip_check;
+}
+
+void Ip::set_tot_len(int tot_len){
+    struct iphdr* ip = reinterpret_cast<struct iphdr*>(get_pktbuf());
+    ip->tot_len = htons(tot_len);
+    ip_tot_len = htons(tot_len);
 }
 
 void Ip::assemble(){

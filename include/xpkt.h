@@ -9,10 +9,12 @@
 
 #define BYTE      1
 #define WORD      2
+#define DWORD     4
 
 #define INIT_SIZE 256
 
 #define WPTR_TO_BPTR(WPTR)  (reinterpret_cast <pktbyte_n *>(WPTR))
+#define DPTR_TO_BPTR(DPTR)  (reinterpret_cast <pktbyte_n *>(DPTR))
 
 /* 
     Redefine types
