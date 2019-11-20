@@ -72,8 +72,6 @@ void TcpBlocker::close_conn(Xpkt *xpkt){
     Ip backward_closer_ip = Ip(IPPROTO_TCP, ip.get_daddr(), ip.get_saddr());
     Tcp backward_closer_tcp = Tcp();
 
-    std::cout << tcp.get_payload_len() << std::endl;
-    std::cout << tcp.get_seq() << std::endl;
     backward_closer_tcp.mangle_fin_ack(
         tcp.get_dst(),
         tcp.get_src(),

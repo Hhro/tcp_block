@@ -1,4 +1,4 @@
-# send_arp
+# tcp_block
 
 ## Build
 
@@ -9,6 +9,6 @@ make
 ## Example
 
 ```bash
-build/send_arp eth0 172.23.112.1 172.23.125.100
+build/tcp_block eth0 dragonsector.pl
 ```
 
