@@ -68,14 +68,17 @@ void TcpBlocker::close_conn(Xpkt *xpkt){
     Tcp tcp = Tcp(*xpkt);
     
     std::cout << "backward" << std::endl;
-    Ether backward_closer_eth = Ether(eth.get_src(), eth.get_dst(), ETH_P_IP);
+    Ether backward_closer_eth = Ether(eth.get_dst(), eth.get_src(), ETH_P_IP);
     Ip backward_closer_ip = Ip(IPPROTO_TCP, ip.get_daddr(), ip.get_saddr());
     Tcp backward_closer_tcp = Tcp();
-    backward_closer_tcp.mangle_fin(
+
+    std::cout << tcp.get_payload_len() << std::endl;
+    std::cout << tcp.get_seq() << std::endl;
+    backward_closer_tcp.mangle_fin_ack(
         tcp.get_dst(),
         tcp.get_src(),
         tcp.get_ack_seq(),
-        tcp.get_seq()+htonl(tcp.get_payload_len())
+        htonl(ntohl(tcp.get_seq())+tcp.get_payload_len())
     );
     backward_closer_tcp.append_payload(const_cast<char*>(WARNING), strlen(WARNING));
     backward_closer_tcp.set_checksum(&backward_closer_ip);
@@ -92,7 +95,7 @@ void TcpBlocker::close_conn(Xpkt *xpkt){
     forward_closer_tcp.mangle_rst_ack(
         tcp.get_src(),
         tcp.get_dst(),
-        tcp.get_seq(),
+        htonl(ntohl(tcp.get_seq())+tcp.get_payload_len()),
         tcp.get_ack_seq()
     );
     forward_closer_tcp.set_checksum(&forward_closer_ip);

@@ -7,7 +7,7 @@ Tcp::Tcp(Xpkt xpkt) : Xpkt(xpkt){
 Tcp::Tcp() : Xpkt(){
 }
 
-void Tcp::mangle_fin(pktword_n src, pktword_n dst, pktdword_n seq, pktdword_n ack_seq){
+void Tcp::mangle_fin_ack(pktword_n src, pktword_n dst, pktdword_n seq, pktdword_n ack_seq){
     struct tcphdr tcp;
     BZERO(&tcp, TCP_HLEN);
 
@@ -17,6 +17,7 @@ void Tcp::mangle_fin(pktword_n src, pktword_n dst, pktdword_n seq, pktdword_n ac
     tcp.ack_seq = ack_seq;
     tcp.doff = TCP_HLEN / 4;
     tcp.fin = 1;
+    tcp.ack = 1;
     tcp.check = 0;
 
     Xpkt::set_pktbuf(reinterpret_cast<pktbyte_n*>(&tcp), TCP_HLEN);
@@ -118,10 +119,10 @@ void Tcp::dissect(){
     tcp_check = tcp->check;
     tcp_urg_ptr = tcp->urg_ptr;
 
-    tcp_payload_len = ip->tot_len - (ip->ihl + tcp_doff) * 4;
+    tcp_payload_len = ntohs(ip->tot_len) - (IP_HLEN + tcp_doff*4);
 
     if(tcp_payload_len)
-        tcp_payload = reinterpret_cast<pktbyte_n*>(tcp) + (tcp_doff * 4);
+        tcp_payload = reinterpret_cast<pktbyte_n*>(tcp) + tcp_doff*4;
     else
         tcp_payload = nullptr;
 }

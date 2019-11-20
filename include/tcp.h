@@ -57,7 +57,7 @@ class Tcp : public Xpkt{
         pktword_n get_dst() { return tcp_dst; }
         pktdword_n get_seq() { return tcp_seq; }
         pktdword_n get_ack_seq() { return tcp_ack_seq; }
-        void mangle_fin(pktword_n src, pktword_n dst, pktdword_n seq, pktdword_n ack_seq);
+        void mangle_fin_ack(pktword_n src, pktword_n dst, pktdword_n seq, pktdword_n ack_seq);
         void mangle_rst_ack(pktword_n src, pktword_n dst, pktdword_n seq, pktdword_n ack_seq);
         void append_payload(char *payload, int len);
         void set_checksum(Ip *ip);

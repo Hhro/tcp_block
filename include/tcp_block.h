@@ -5,7 +5,7 @@
 
 #define BLOCK_HOST 0
 
-#define WARNING "HTTP/1.1 302 Redirect \r\nLocation: http://www.warning.or.kr\r\n\r\n"
+#define WARNING "HTTP/1.1 302 Redirect\r\nLocation: http://www.warning.or.kr\r\n\r\n"
 
 class Blockopt{
     private:
